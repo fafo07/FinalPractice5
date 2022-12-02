@@ -1,0 +1,25 @@
+{
+  "area": [
+    {
+      "id": 1,
+      "nombre": "Oficina",
+      "Encargado": "Juan Lopez",
+      "Funcionarios": 3
+    },
+    {
+      "nombre": "Contabilidad",
+      "Encargado": "Carlos Perez",
+      "Funcionarios": 3,
+      "id": 2
+    }
+  ],
+  "activo": [
+    {
+      "id": 1,
+      "Activo": "Laptop",
+      "Marca": "Dell",
+      "Estado": "Nuevo",
+      "areaId": 1
+    }
+  ]
+}
