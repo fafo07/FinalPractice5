@@ -1,11 +1,13 @@
 version: '3.7'
 services:
  web-backend:
-  build: Backend/.
+  image: web-backend:latest
+  build: .
   command: python Backend/manage.py runserver 0.0.0.0:8000
   ports:
    - "8000:8000"
  web-frontend:
-  build: Frontend/.
+  image: web-frontend:latest
+  build: .
   ports:
    - "80:80"
