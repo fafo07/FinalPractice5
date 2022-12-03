@@ -19,7 +19,7 @@ pipeline{
                 sh "docker build --file=Backend/backend.dockerfile  -t web-backend ."
                 sh "docker save -o backend.tar web-backend"
                 sh "docker save -o frontend.tar web-frontend"
-                stash name: "stash-backend" includes: "backend.tar"
+                stash name: "stash-backend", includes: "backend.tar"
                 archiveArtifacts "backend.tar"
                 stash name: "stash-frontend", includes: "frontend.tar"
                 archiveArtifacts "frontend.tar"
