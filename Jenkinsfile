@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage('Cloning Repository')
         {
-            agent { label 'DEV'}
+            agent {label 'DEV'}
             steps
             {
                 git branch: 'master' , url: 'https://github.com/fafo07/FinalPractice5.git'                
@@ -12,6 +12,7 @@ pipeline{
         }
         stage('Build Images Docker')
         {
+            agent {label 'DEV'}
             steps
             {
                 sh "docker build --file=Frontend/frontend.dockerfile  -t web-frontend ."
@@ -42,18 +43,16 @@ pipeline{
         stage('Deploy in PROD')
         {
             agent{ label 'PROD'}
+            steps
             {
-                steps
-                {
-                    untash "stash-backend"
-                    untash "stash-frontend"
-                    sh "docker load -i backend.tar"
-                    sh "docker load -i frontend.tar"
-                    sh "docker rm wbackend -f || true"
-                    sh "docker rm wfrontend -f || true"
-                    sh "docker run --name  wbackend web-backend"
-                    sh "docker run --name  wbackend front-backend"
-                }
+                untash "stash-backend"
+                untash "stash-frontend"
+                sh "docker load -i backend.tar"
+                sh "docker load -i frontend.tar"
+                sh "docker rm wbackend -f || true"
+                sh "docker rm wfrontend -f || true"
+                sh "docker run --name  wbackend web-backend"
+                sh "docker run --name  wbackend front-backend"
             }
         }
     }
