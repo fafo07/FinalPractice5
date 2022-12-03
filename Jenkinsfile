@@ -30,8 +30,8 @@ pipeline{
             agent{ label 'QA'}
             steps
             {
-                untash "stash-backend"
-                untash "stash-frontend"
+                unstash "stash-backend"
+                unstash "stash-frontend"
                 sh "docker load -i backend.tar"
                 sh "docker load -i frontend.tar"
                 sh "docker rm wbackend -f || true"
@@ -45,8 +45,8 @@ pipeline{
             agent{ label 'PROD'}
             steps
             {
-                untash "stash-backend"
-                untash "stash-frontend"
+                unstash "stash-backend"
+                unstash "stash-frontend"
                 sh "docker load -i backend.tar"
                 sh "docker load -i frontend.tar"
                 sh "docker rm wbackend -f || true"
