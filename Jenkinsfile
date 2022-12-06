@@ -54,8 +54,8 @@ pipeline{
                 sh "docker run --name  wbackend front-backend"
                 script
                 {
-                    BQA_statuscode= sh "curl -s -w "%{http_code}" http://192.168.0.27:8000/almacen/Productos/ -o /dev/null" 
-                    FQA_statuscode= sh "curl -s -w "%{http_code}" http://192.168.0.27:80 -o /dev/null" 
+                    BQA_statuscode=sh "curl -s -w "%{http_code}" http://192.168.0.26:8000/almacen/Productos/ -o /dev/null" 
+                    FQA_statuscode=sh "curl -s -w "%{http_code}" http://192.168.0.26:80 -o /dev/null"
                 }
              }
         }
