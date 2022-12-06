@@ -1,9 +1,9 @@
+def BDEV_statuscode
+def FDEV_statuscode
+def BQA_statuscode
+def FQA_statuscode
 pipeline{
     agent any
-    def BDEV_statuscode
-    def FDEV_statuscode
-    def BQA_statuscode
-    def FQA_statuscode
     stages{
         stage('Cloning Repository')
         {
@@ -27,8 +27,11 @@ pipeline{
                 archiveArtifacts "backend.tar"
                 stash name: "stash-frontend", includes: "frontend.tar"
                 archiveArtifacts "frontend.tar"
-                BDEV_statuscode=sh(script:"curl -s -w "%{http_code}" http://192.168.0.26:8000/almacen/Productos/ -o /dev/null",returnStdout: true) 
-                FDEV_statuscode=sh(script:"curl -s -w "%{http_code}" http://192.168.0.26:80 -o /dev/null",returnStdout: true) 
+                script
+                {
+                    BDEV_statuscode=sh "curl -s -w "%{http_code}" http://192.168.0.26:8000/almacen/Productos/ -o /dev/null" 
+                    FDEV_statuscode=sh "curl -s -w "%{http_code}" http://192.168.0.26:80 -o /dev/null"
+                }
             }
         }
         stage('Deploy in QA')
@@ -48,8 +51,11 @@ pipeline{
                 sh "docker rm wfrontend -f || true"
                 sh "docker run --name  wbackend web-backend"
                 sh "docker run --name  wbackend front-backend"
-                BQA_statuscode=sh(script:"curl -s -w "%{http_code}" http://192.168.0.27:8000/almacen/Productos/ -o /dev/null",returnStdout: true) 
-                FQA_statuscode=sh(script:"curl -s -w "%{http_code}" http://192.168.0.27:80 -o /dev/null",returnStdout: true) 
+                script
+                {
+                    BQA_statuscode= sh "curl -s -w "%{http_code}" http://192.168.0.27:8000/almacen/Productos/ -o /dev/null" 
+                    FQA_statuscode= sh "curl -s -w "%{http_code}" http://192.168.0.27:80 -o /dev/null" 
+                }
              }
         }
         stage('Deploy in PROD')
@@ -73,4 +79,3 @@ pipeline{
         }
     }
 }
-
