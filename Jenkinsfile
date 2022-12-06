@@ -30,8 +30,9 @@ pipeline{
                 archiveArtifacts "frontend.tar"
                 script
                 {
-                    BDEV_statuscode=sh "curl -s -w "%{http_code}" http://192.168.0.26:8000/almacen/Productos/ -o /dev/null" 
-                    FDEV_statuscode=sh "curl -s -w "%{http_code}" http://192.168.0.26:80 -o /dev/null"
+                    BDEV_statuscode =sh(script: "curl -s -w %{http_code} http://192.168.0.26:8000/almacen/Productos/ -o /dev/null", returnStdout: true).trim() 
+                    FDEV_statuscode =sh(script: "curl -s -w %{http_code} http://192.168.0.26:80 -o /dev/null", returnStdout: true).trim()
+                    echo BDEV_statuscode
                 }
             }
         }
@@ -54,8 +55,9 @@ pipeline{
                 sh "docker run --name  wbackend front-backend"
                 script
                 {
-                    BQA_statuscode=sh "curl -s -w "%{http_code}" http://192.168.0.26:8000/almacen/Productos/ -o /dev/null" 
-                    FQA_statuscode=sh "curl -s -w "%{http_code}" http://192.168.0.26:80 -o /dev/null"
+                    BQA_statuscode =sh(script: "curl -s -w %{http_code} http://192.168.0.26:8000/almacen/Productos/ -o /dev/null", returnStdout: true).trim() 
+                    FQA_statuscode =sh(script: "curl -s -w %{http_code} http://192.168.0.26:80 -o /dev/null", returnStdout: true).trim()
+                    echo BQA_statuscode
                 }
              }
         }
