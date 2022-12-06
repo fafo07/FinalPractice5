@@ -23,11 +23,17 @@ pipeline{
                 archiveArtifacts "backend.tar"
                 stash name: "stash-frontend", includes: "frontend.tar"
                 archiveArtifacts "frontend.tar"
+                params.BDEV_statuscode=sh "curl -s -w "%{http_code}\n" http://192.168.0.26:8000/almacen/Productos/ -o /dev/null"
+                params.FDEV_statuscode=sh "curl -s -w "%{http_code}\n" http://192.168.0.26:80/ -o /dev/null"
             }
         }
         stage('Deploy in QA')
         {
             agent{ label 'QA'}
+            when
+            {
+                 expression { params.BDEV_statuscode == '200' &&  params.FDEV_statuscode == '200' }
+            }
             steps
             {
                 unstash "stash-backend"
@@ -38,11 +44,17 @@ pipeline{
                 sh "docker rm wfrontend -f || true"
                 sh "docker run --name  wbackend web-backend"
                 sh "docker run --name  wbackend front-backend"
+                params.BQA_statuscode=sh "curl -s -w "%{http_code}\n" http://192.168.0.27:8000/almacen/Productos/ -o /dev/null"
+                params.FQA_statuscode=sh "curl -s -w "%{http_code}\n" http://192.168.0.27:80/ -o /dev/null"
             }
         }
         stage('Deploy in PROD')
         {
             agent{ label 'PROD'}
+            when
+            {
+                 expression { params.BQA_statuscode == '200' &&  params.FQA_statuscode == '200' }
+            }
             steps
             {
                 unstash "stash-backend"
