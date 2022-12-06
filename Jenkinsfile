@@ -23,8 +23,8 @@ pipeline{
                 archiveArtifacts "backend.tar"
                 stash name: "stash-frontend", includes: "frontend.tar"
                 archiveArtifacts "frontend.tar"
-                params.BDEV_statuscode=sh "curl -s -w "%{http_code}\n" http://192.168.0.26:8000/almacen/Productos/ -o /dev/null"
-                params.FDEV_statuscode=sh "curl -s -w "%{http_code}\n" http://192.168.0.26:80/ -o /dev/null"
+                params.BDEV_statuscode=sh "curl -s -w "%{http_code}" http://192.168.0.26:8000/almacen/Productos/ -o /dev/null"
+                params.FDEV_statuscode=sh "curl -s -w "%{http_code}" http://192.168.0.26:80/ -o /dev/null"
             }
         }
         stage('Deploy in QA')
