@@ -41,7 +41,7 @@ pipeline{
             agent{ label 'QA'}
             when
             {
-                 expression { params.BDEV_statuscode == '200' &&  params.FDEV_statuscode == '200' }
+                 expression { BDEV_statuscode == '200' &&  FDEV_statuscode == '200' }
             }
             steps
             {
@@ -66,7 +66,7 @@ pipeline{
             agent{ label 'PROD'}
             when
             {
-                 expression { params.BQA_statuscode == '200' &&  params.FQA_statuscode == '200' }
+                 expression { BQA_statuscode == '200' &&  FQA_statuscode == '200' }
             }
             steps
             {
